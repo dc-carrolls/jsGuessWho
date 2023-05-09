@@ -34,7 +34,8 @@ const characters = [
   const board = document.querySelector('.board');
   const options = document.querySelector('.options');
   const question = document.querySelector('.question');
-  const resetButton = document.querySelector('.reset-button');
+  //const resetButton = document.querySelector('.reset-button');
+  const resetButton = document.getElementById('reset-button');
   
   // Create the character cards
   function createCharacterCards() {
@@ -112,42 +113,41 @@ const characters = [
     
     // Initialize the game
     function initGame() {
-    createCharacterCards();
-    board.addEventListener('click', (event) => {
-    if (!gameEnded && event.target.classList.contains('card')) {
-    selectCard(event.target);
+        createCharacterCards();
+        board.addEventListener('click', (event) => {
+            if (!gameEnded && event.target.classList.contains('card')) {
+                selectCard(event.target);
+            }
+        });
+        options.addEventListener('click', (event) => {
+            if (!gameEnded && event.target.classList.contains('option')) {
+                event.target.classList.add('disabled');
+            if (event.target.getAttribute('data-guess') === 'yes') {
+                makeGuess();
+            } else {
+                const attribute = event.target.getAttribute('data-attribute');
+                const value = event.target.getAttribute('data-value');
+                const cards = document.querySelectorAll(`[data-${attribute}='${value}']`);
+                cards.forEach((card) => {
+                    card.classList.add('disabled');
+        });
+        const numDisabledCards = document.querySelectorAll('.card.disabled').length;
+        if (numDisabledCards === characters.length - 1) {
+            const remainingCard = document.querySelector('.card:not(.disabled)');
+            endGame(remainingCard.getAttribute('data-name'), {
+                hair: remainingCard.getAttribute('data-hair'),
+                eyes: remainingCard.getAttribute('data-eyes'),
+                gender: remainingCard.getAttribute('data-gender'),
+                hat: remainingCard.getAttribute('data-hat'),
+            });
+        } else {
+            question.innerText = `Does your character have ${attribute} ${value}?`;
+        }
+        }
     }
     });
-    options.addEventListener('click', (event) => {
-    if (!gameEnded && event.target.classList.contains('option')) {
-    event.target.classList.add('disabled');
-    if (event.target.getAttribute('data-guess') === 'yes') {
-    makeGuess();
-    } else {
-    const attribute = event.target.getAttribute('data-attribute');
-    const value = event.target.getAttribute('data-value');
-    const cards = document.querySelectorAll(`[data-${attribute}='${value}']`);
-    cards.forEach((card) => {
-    card.classList.add('disabled');
-    });
-    const numDisabledCards = document.querySelectorAll('.card.disabled').length;
-    if (numDisabledCards === characters.length - 1) {
-    const remainingCard = document.querySelector('.card:not(.disabled)');
-    endGame(remainingCard.getAttribute('data-name'), {
-    hair: remainingCard.getAttribute('data-hair'),
-    eyes: remainingCard.getAttribute('data-eyes'),
-    gender: remainingCard.getAttribute('data-gender'),
-    hat: remainingCard.getAttribute('data-hat'),
-    });
-    } else {
-        question.innerText = `Does your character have ${attribute} ${value}?`;
-
-    }
-    }
-    }
-    });
-    resetButton.addEventListener('click', resetGame);
-    resetGame();
+        resetButton.addEventListener('click', resetGame);
+        resetGame();
     }
     
     // Initialize the game when the DOM is loaded
