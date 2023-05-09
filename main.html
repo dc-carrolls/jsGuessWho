@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Guess Who Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+   
+</head>
+  <body>
+    <h1>Guess Who Game</h1>
+    <div id="board"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="reset-button">Reset</button>
+    <!--script src="script.js"></script-->
+    <script>
+        alert("test");
+        const characters = [
+        {
+          name: 'Alex',
+          hair: 'blonde',
+          eyes: 'blue',
+          gender: 'male',
+          hat: false
+        },
+        {
+          name: 'Bob',
+          hair: 'brown',
+          eyes: 'brown',
+          gender: 'male',
+          hat: true
+        },
+        {
+          name: 'Cathy',
+          hair: 'black',
+          eyes: 'brown',
+          gender: 'female',
+          hat: false
+        },
+        {
+          name: 'Dave',
+          hair: 'red',
+          eyes: 'green',
+          gender: 'male',
+          hat: true
+        },
+        {
+          name: 'Emily',
+          hair: 'blonde',
+          eyes: 'green',
+          gender: 'female',
+          hat: false
+        },
+        {
+          name: 'Frank',
+          hair: 'black',
+          eyes: 'blue',
+          gender: 'male',
+          hat: true
+        },
+        {
+          name: 'Grace',
+          hair: 'brown',
+          eyes: 'blue',
+          gender: 'female',
+          hat: false
+        },
+        {
+          name: 'Henry',
+          hair: 'red',
+          eyes: 'brown',
+          gender: 'male',
+          hat: false
+        },
+        {
+          name: 'Isabel',
+          hair: 'blonde',
+          eyes: 'brown',
+          gender: 'female',
+          hat: true
+        },
+        {
+          name: 'John',
+          hair: 'brown',
+          eyes: 'green',
+          gender: 'male',
+          hat: false
+        },
+      ];
+      
+      let selectedCharacter;
+      let selectedCard;
+      let gameEnded = false;
+      
+      const board = document.getElementById('board');
+      const question = document.getElementById('question');
+      const options = document.getElementById('options');
+      const resetButton = document.getElementById('reset-button');
+      
+      // Create the board
+      characters.forEach((character, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.setAttribute('data-index', index);
+        card.innerText = '?';
+        card.addEventListener('click', () => {
+        if (!gameEnded && !card.classList.contains('selected')) {
+        selectCard(card);
+        }
+        });
+        board.appendChild(card);
+        });
+        
+        // Select a card
+        function selectCard(card) {
+        if (selectedCard) {
+        selectedCard.classList.remove('selected');
+        }
+        card.classList.add('selected');
+        selectedCard = card;
+        showOptions();
+        }
+        
+        // Show the available options
+        function showOptions() {
+        const optionsHtml = characters
+        .filter((character) => {
+        return !cardMatches(character, selectedCard);
+        })
+        .map((character) => {
+        return <button data-hair="${character.hair}" data-eyes="${character.eyes}" data-gender="${character.gender}" data-hat="${character.hat}">${character.name}</button>;
+        })
+        .join('');
+        options.innerHTML = optionsHtml;
+        }
+        
+        // Check if a card matches a character
+        function cardMatches(character, card) {
+        const cardIndex = parseInt(card.getAttribute('data-index'));
+        if (character.name === characters[cardIndex].name) {
+        return true;
+        }
+        if (card.classList.contains('correct') || card.classList.contains('incorrect')) {
+        return false;
+        }
+        return (
+        (card.getAttribute('data-hair') === character.hair || card.getAttribute('data-hair') === 'any') &&
+        (card.getAttribute('data-eyes') === character.eyes || card.getAttribute('data-eyes') === 'any') &&
+        (card.getAttribute('data-gender') === character.gender || card.getAttribute('data-gender') === 'any') &&
+        (card.getAttribute('data-hat') === character.hat.toString() || card.getAttribute('data-hat') === 'any')
+        );
+        }
+        
+        // Make a guess
+        function makeGuess() {
+        const characterIndex = characters.findIndex((character) => {
+        return cardMatches(character, selectedCard);
+        });
+        if (characterIndex === -1) {
+        selectedCard.classList.add('incorrect');
+        selectedCard = null;
+        question.innerText = 'Incorrect guess';
+        } else {
+        board.childNodes[characterIndex].classList.add('correct');
+        selectedCard.classList.add('correct');
+        selectedCard = null;
+        question.innerText = 'Correct guess';
+        gameEnded = true;
+        }
+        }
+        
+        // Reset the game
+        function resetGame() {
+        board.childNodes.forEach((card) => {
+        card.classList.remove('selected', 'correct', 'incorrect');
+        });
+        selectedCard = null;
+        question.innerText = '';
+        options.innerHTML = '';
+        gameEnded = false;
+        }
+        
+        // Add event listeners
+        options.addEventListener('click', (event) => {
+        const button = event.target;
+        if (button.nodeName === 'BUTTON') {
+        selectedCard.setAttribute('data-hair', button.getAttribute('data-hair'));
+        selectedCard.setAttribute('data-eyes', button.getAttribute('data-eyes'));
+        selectedCard.setAttribute('data-gender', button.getAttribute('data-gender'));
+        selectedCard.setAttribute('data-hat', button.getAttribute('data-hat'));
+        makeGuess();
+        }
+        });
+        
+        resetButton.addEventListener('click', resetGame);
+      
+        </script>
+      
+  </body>
+</html>
