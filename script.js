@@ -126,7 +126,7 @@ const characters = [
     } else {
     const attribute = event.target.getAttribute('data-attribute');
     const value = event.target.getAttribute('data-value');
-    const cards = document.querySelectorAll(cards[data-${attribute}='${value}']);
+    const cards = document.querySelectorAll(`[data-${attribute}='${value}']`);
     cards.forEach((card) => {
     card.classList.add('disabled');
     });
@@ -140,7 +140,8 @@ const characters = [
     hat: remainingCard.getAttribute('data-hat'),
     });
     } else {
-    question.innerText = Does your character have ${attribute} ${value}?;
+        question.innerText = `Does your character have ${attribute} ${value}?`;
+
     }
     }
     }
