@@ -31,23 +31,23 @@ const characters = [
   ];
   
   // Define the DOM elements
-  const board = document.querySelector('board');
-  const options = document.querySelector('options');
-  const question = document.querySelector('question');
-  const resetButton = document.querySelector('reset-button');
+  const board = document.querySelector('.board');
+  const options = document.querySelector('.options');
+  const question = document.querySelector('.question');
+  const resetButton = document.querySelector('.reset-button');
   
   // Create the character cards
   function createCharacterCards() {
-    characters.forEach((character) => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      card.setAttribute('data-hair', character.hair);
-      card.setAttribute('data-eyes', character.eyes);
-      card.setAttribute('data-gender', character.gender);
-      card.setAttribute('data-hat', character.hat);
-      card.innerText = '?';
+    for (let i = 0; i < characters.length; i++) {
+      const character = characters[i];
+      const card = document.createElement('div'); // Define the 'card' variable here
+      card.className = 'card';
+      const image = document.createElement('img');
+      image.src = character.image;
+      image.alt = character.name;
+      card.appendChild(image);
       board.appendChild(card);
-    });
+    }
   }
   
   // Select a card
