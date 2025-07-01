@@ -43,10 +43,10 @@ const characters = [
       const character = characters[i];
       const card = document.createElement('div'); // Define the 'card' variable here
       card.className = 'card';
-      const image = document.createElement('img');
-      image.src = character.image;
-      image.alt = character.name;
-      card.appendChild(image);
+    //   const image = document.createElement('img');
+    //   image.src = character.image;
+    //   image.alt = character.name;
+    //   card.appendChild(image);
       board.appendChild(card);
     }
   }
